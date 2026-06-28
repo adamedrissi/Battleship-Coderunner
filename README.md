@@ -31,7 +31,7 @@ The overall objective of this assignment is to produce Java programming code tha
 
 For this assessment, a complete game is not being written, but a series of Java methods that could be used in a fully-fledged implementation. We are also just going to be working with the board the players record the location of their own ships (fleet) on.									
 
-During the CodeRunner examination/test you will be asked to submit one or more Java methods [as needed, see below and Appendix B] where the solutions to the tasks listed are implemented as public static methods.
+During the CodeRunner examination/test you will be asked to submit one or more Java methods [as needed, see below] where the solutions to the tasks listed are implemented as public static methods.
 When completing the tasks, please note the following:
 
 1)	A Battleship board will be represented as a ten (10) row by ten (10) column char array. Note that row indices range between 1 and 10 and column indices range between ‘A’ and ‘J’ (upper case ONLY parameters – see below), whilst Java arrays start at zero (0). Position “1A” will be (0,0) in a Java array.
