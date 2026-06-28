@@ -15,217 +15,216 @@ public class Battleship {
 				{'.','.','.','.','S','S','S','.','S','*'},
 				{'.','.','.','.','.','.','.','.','.','.'},
 		};
-		System.out.println(boardSquare('*'));
-		//System.out.println(validBoardSquare('S'));
-		System.out.println(validBoard(board));
-		System.out.println(numberSunk(board));
-		System.out.println(getHit(1,'D',board));
-		System.out.println(countShip(board,"Battleship","damaged"));
-		System.out.println(calculateDamage(board));
+		System.out.println(boardSquare('S')); // 1.1 - VALID_BOARD_SQUARE
+		System.out.println(validBoard(board)); // 1.2 - VALID_BOARD
+		System.out.println(numberSunk(board)); // 1.3 - NUMBER_SUNK
+		System.out.println(getHit(1,'D',board)); // 1.4 - HIT
+		System.out.println(countShip(board,"Battleship","damaged")); // 1.5 - COUNT_SHIP
+		System.out.println(java.util.Arrays.toString(calculateDamage(board))); // BONUS - BONUS_QUESTION 
 	}
 	
-	public static Boolean boardSquare(char valid) {
-		if (valid != '.' && valid != 'S' && valid != '*'){
-            return false;
-        }
-        else {
-            return true;
-        }
+	// 1.1 - VALID_BOARD_SQUARE
+	public static boolean boardSquare(char valid) {
+		return valid == '.' || valid == 'S' || valid == '*';
 	}
 	
-	// METHOD 2 (Boolean, return char)
-	public static Boolean validBoardSquare(char valid) {
-		return valid == '.' || valid == 'S' || valid == '*';
-	}
-	/*
-	public boolean boardSquare(char valid) {
-		return valid == '.' || valid == 'S' || valid == '*';
-	}*/
-		
+	// 1.2 - VALID_BOARD
 	public static int validBoard(char[][] board) {
-	    if (board == null)
-	        return -1; // board is null
-	    if (board.length != 10 || board[0].length != 10)
-	        return -2; // wrong size
-	    for (char[] row : board) {
-	        for (char valid : row) {
-	             if (!boardSquare(valid))
-	                 return -3; // invalid square
+	    if (board == null) {
+	        return -1; // Board is null
+	    }
+	    if (board.length != 10) {
+	        return -2; // Wrong number of rows
+	    }
+	    for (int row = 0; row < 10; row++) {
+	        if (board[row] == null || board[row].length != 10) {
+	            return -2; // Wrong number of columns
+	        }
+	        for (int column = 0; column < 10; column++) {
+	            if (!boardSquare(board[row][column])) {
+	                return -3; // Invalid square
 	            }
 	        }
-	        return 1; // valid board
 	    }
-	
-	/*
-	public boolean boardSquare(char valid) {
-    	return valid == '.' || valid == 'S' || valid == '*';
-	} // 1.1. Valid Board Method (Boolean)
-	public int validBoard(char[][] board) {
-    	if (board == null) {
-        	return -1; // null board
-    	}
-    	if (board.length != 10 || board[0].length != 10) {
-        	return -2; // wrong size
-    	}
-    	for (int row = 0; row < 10; row++) {
-        	for (int column = 0; column < 10; column++) {
-            	if (!boardSquare(board[row][column])) {
-                	return -3; // invalid square
-            	}
-        	}
-    	}
-    	return 0; // valid board
-	}*/
-	
-
-	public static int numberSunk(char[][] board) {
-        int count = 0;
-        for (char[] row : board) {
-            for (char square : row) {
-                if (square == '*')
-                    count++;
-            }
-        }
-        return count;
-    }
-
-	/*
-	public int numberSunk(char[][] board) {
-    	int count = 0;
-    	for (int row = 0; row < 10; row++) {
-        	for (int column = 0; column < 10; column++) {
-            	if (board[row][column] == '*') {
-                	count++;
-            	}
-        	}
-    	}
-    	return count;
+	    return 1; // Valid board
 	}
-	*/
 	
+	// 1.3 - NUMBER_SUNK
+	public static int numberSunk(char[][] board) {
+	    int count = 0;
+	    for (int row = 0; row < 10; row++) {
+	        int column = 0;
+	        while (column < 10) {
+	            if (board[row][column] == 'S' || board[row][column] == '*') {
+	                int length = 0;
+	                int hitSquares = 0;
+	                while (column < 10 &&
+	                      (board[row][column] == 'S' || board[row][column] == '*')) {
+	                    if (board[row][column] == '*') {
+	                        hitSquares++;
+	                    }
+	                    length++;
+	                    column++;
+	                }
+	                if (hitSquares == length) {
+	                    count++;
+	                }
+	            } else {
+	                column++;
+	            }
+	        }
+	    }
+	    return count;
+	}
 	
+	// 1.4 - HIT
 	public static int getHit(int row, char column, char[][] board) {
-        if (row < 0 || row >= 10)
-            return -1; // invalid row number
-        if (column < 'A' || column > 'J')
-            return -2; // invalid column
-        if (board[row][column - 'A'] == 'S')
-            return 1; // hit
-        if (board[row][column - 'A'] == '.')
-            return 2; // miss
-        if (board[row][column - 'A'] == '*')
-            return 3; // repeated hit
-        return -3; // unknown condition
-    }
+	    if (row < 1 || row > 10) {
+	        return -1; // Invalid row
+	    }
+	    if (column < 'A' || column > 'J') {
+	        return -2; // Invalid column
+	    }
+	    char square = board[row - 1][column - 'A'];
+	    if (square == 'S') {
+	        return 1; // Hit
+	    } else if (square == '.') {
+	        return 2; // Miss
+	    } else {
+	        return 3; // Repeated hit
+	    }
+	}
 	
-	/*
-	public int getHit(int row, char column, char[][] board) {
-    	if (row < 1 || row > 10) {
-        	return -1; // invalid row
-    	}
-    	if (column < 'A' || column > 'J') {
-        	return -2; // invalid column
-    	}
-    	char valid = board[row - 1][column - 'A'];
-    	if (valid == 'S') {
-        	return 1; // hit
-    	} else if (valid == '.') {
-        	return 2; // miss
-    	} else {
-        	return 3; // repeated hit
-    	}
-	}*/
-	
+	// 1.5 - COUNT_SHIP
 	public static int countShip(char[][] board, String shipType, String damageType) {
-        int count = 0;
-        char shipChar = getShipChar(shipType);
-        if (shipChar == '\0')
-            return -1; // invalid ship type
-        for (char[] row : board) {
-            for (char square : row) {
-                if (square == shipChar || (damageType.equals("damaged") && square == '*')) {
-                    count++;
-                } else if (damageType.equals("sunk") && square == '*') {
-                    return -3; // error: ship cannot be sunk if not present
-                }
-            }
-        }
-        return count;
-    }
-	// Helper method to get ship character based on ID or class
-	private static char getShipChar(String shipType) {
-        switch (shipType) {
-            case "Carrier":
-            case "1":
-                return '1';
-            case "Battleship":
-            case "2":
-                return '2';
-            case "Cruiser":
-            case "3":
-                return '3';
-            case "Destroyer":
-            case "4":
-                return '4';
-            default:
-                return '\0'; // Invalid ship type
-        }
-    }
+	    int targetLength = getShipLength(shipType);
+	    if (targetLength == -1) {
+	        return -1; // Invalid ship type
+	    }
+	    if (!validDamageType(damageType)) {
+	        return -2; // Invalid damage type
+	    }
+	    int count = 0;
+	    for (int row = 0; row < 10; row++) {
+	        int column = 0;
+	        while (column < 10) {
+	            if (board[row][column] == 'S' || board[row][column] == '*') {
+	                int length = 0;
+	                int hitSquares = 0;
+	                while (column < 10 &&
+	                      (board[row][column] == 'S' || board[row][column] == '*')) {
+	                    if (board[row][column] == '*') {
+	                        hitSquares++;
+	                    }
+	                    length++;
+	                    column++;
+	                }
+	                if (length == targetLength) {
+	                    String actualDamageType;
+	                    if (hitSquares == 0) {
+	                        actualDamageType = "undamaged";
+	                    } else if (hitSquares == length) {
+	                        actualDamageType = "sunk";
+	                    } else {
+	                        actualDamageType = "damaged";
+	                    }
+	                    if (damageType.equals("all") || damageType.equals(actualDamageType)) {
+	                        count++;
+	                    }
+	                }
+	            } else {
+	                column++;
+	            }
+	        }
+	    }
+	    return count;
+	}
 
-	/*
-	public int countShip(char[][] board, String shipType, String damageType) {
-    	int count = 0;
-    	for (int i = 0; i < 10; i++) {
-        	for (int j = 0; j < 10; j++) {
-            	if (board[i][j] == 'S' || board[i][j] == '*') {
-                	count++;
-            	}
-        	}
-    	}
-    	// Add logic to check shipType and damageType
-    	return count;
-	}*/
+	public static int getShipLength(String shipType) {
+	    if (shipType == null) {
+	        return -1;
+	    }
+	    if (shipType.equals("1") || shipType.equals("Carrier")) {
+	        return 5;
+	    } else if (shipType.equals("2") || shipType.equals("Battleship")) {
+	        return 4;
+	    } else if (shipType.equals("3") || shipType.equals("Cruiser")) {
+	        return 3;
+	    } else if (shipType.equals("4") || shipType.equals("Destroyer")) {
+	        return 2;
+	    } else {
+	        return -1;
+	    }
+	}
+
+	public static boolean validDamageType(String damageType) {
+	    if (damageType == null) {
+	        return false;
+	    }
+	    return damageType.equals("undamaged")
+	        || damageType.equals("damaged")
+	        || damageType.equals("sunk")
+	        || damageType.equals("all");
+	}
 	
+	// BONUS - BONUS_QUESTION
 	public static double[] calculateDamage(char[][] board) {
-        double[] damageReport = new double[4];
-        int[] shipCount = new int[4];
-        // Initialises damage report and ship counts
-        for (int i = 0; i < 4; i++) {
-            damageReport[i] = -1.0; // Error value for ships not found
-            shipCount[i] = 0;
-        }
-        // Counts ships and damage
-        for (char[] row : board) {
-            for (char square : row) {
-                switch (square) {
-                    case 'S':
-                        shipCount[0]++;
-                        break;
-                    case '*':
-                        shipCount[1]++;
-                        break;
-                    case '1':
-                        shipCount[2]++;
-                        break;
-                    case '2':
-                        shipCount[3]++;
-                        break;
-                }
-            }
-        }
-        // Calculates damage percentages
-        for (int i = 0; i < 4; i++) {
-            if (shipCount[i] > 0) {
-                damageReport[i] = (double) shipCount[i] / (double) (i + 1);
-            }
-        }
-        return damageReport;
-    }
+	    double[] damageReport = new double[4];
+	    double[] totalDamage = new double[4];
+	    int[] shipCount = new int[4];
+	    for (int i = 0; i < 4; i++) {
+	        damageReport[i] = -1.0; // No ship of this type found
+	        totalDamage[i] = 0.0;
+	        shipCount[i] = 0;
+	    }
+	    if (validBoard(board) != 1) {
+	        return damageReport; // Invalid board
+	    }
+	    for (int row = 0; row < 10; row++) {
+	        int column = 0;
+	        while (column < 10) {
+	            if (board[row][column] == 'S' || board[row][column] == '*') {
+	                int length = 0;
+	                int hitSquares = 0;
+	                while (column < 10 &&
+	                      (board[row][column] == 'S' || board[row][column] == '*')) {
+	                    if (board[row][column] == '*') {
+	                        hitSquares++;
+	                    }
+	                    length++;
+	                    column++;
+	                }
+	                int index = getShipIndex(length);
+	                if (index != -1) {
+	                    double damagePercent = ((double) hitSquares / length) * 100.0;
+	                    totalDamage[index] = totalDamage[index] + damagePercent;
+	                    shipCount[index]++;
+	                }
+	            } else {
+	                column++;
+	            }
+	        }
+	    }
+	    for (int i = 0; i < 4; i++) {
+	        if (shipCount[i] > 0) {
+	            damageReport[i] = totalDamage[i] / shipCount[i];
+	        }
+	    }
+	    return damageReport;
+	}
 
-	/*
-	public int[] damage(char[][] board) {
-    	int[] damageReport = new int[4];
-    	// Add logic to calculate damage for each ship type
-    	return damageReport;
-	}*/
+	public static int getShipIndex(int length) {
+	    if (length == 5) {
+	        return 0; // Carrier
+	    } else if (length == 4) {
+	        return 1; // Battleship
+	    } else if (length == 3) {
+	        return 2; // Cruiser
+	    } else if (length == 2) {
+	        return 3; // Destroyer
+	    } else {
+	        return -1;
+	    }
+	}
+
 }
